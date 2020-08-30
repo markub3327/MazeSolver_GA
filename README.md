@@ -26,6 +26,4 @@ g++ *.cpp -o MazeSolver_GA --std=c++17
 
 ## License
 
-[![MIT](https://img.shields.io/github/license/marhor3327/MazeSolver_GA.svg)](LICENSE)
-
-**Enjoy**
+[![MIT](https://img.shields.io/github/license/markub3327/MazeSolver_GA.svg)](LICENSE)
