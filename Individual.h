@@ -14,7 +14,7 @@ namespace AI
 		bool** chromosome;
 		float fitness;
 	public:
-		Individual(int _chromosome_size, int _gene_set);
+		Individual(int _chromosome_size, int _gene_set, bool init_random=true);
 		~Individual();
 
 		void setFitness(float val);
@@ -51,7 +51,7 @@ namespace AI
 		return this->chromosome_size;
 	}
 
-	Individual::Individual(int _chromosome_size, int _gene_set)
+	Individual::Individual(int _chromosome_size, int _gene_set, bool init_random)
 	{
 		this->chromosome_size = _chromosome_size;
 		this->gene_set = _gene_set;
@@ -61,10 +61,11 @@ namespace AI
 		for (int i = 0; i < this->chromosome_size; i++)
 		{
 			this->chromosome[i] = new bool[this->gene_set];
-			for (int j = 0; j < this->gene_set; j++)
-			{
-				this->chromosome[i][j] = (bool)(rand() % 2);
-			}
+			if (init_random)
+				for (int j = 0; j < this->gene_set; j++)
+				{
+					this->chromosome[i][j] = (bool)(rand() % 2);
+				}
 		}
 		/*********************************************/
 
@@ -84,6 +85,8 @@ namespace AI
 
 	Individual::~Individual()
 	{
-		delete chromosome;
+		for (int i = 0; i < this->chromosome_size; i++)
+			delete this->chromosome[i];
+		delete[] this->chromosome;
 	}
 }

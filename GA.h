@@ -12,6 +12,8 @@ namespace AI
 	private:
 		float mutation_rate;
 		int population_size;
+		int gene_set;
+		int chromosome_size;
 
 		Individual** populations;
 		int best;
@@ -27,12 +29,15 @@ namespace AI
 		float getFitnessOfIndividual(int idxIndiv);
 		void updateBest();
 		int getBest();
-		int RouletteWheelMechanism(int* idxA, int* idxB);
+		void RouletteWheelMechanism(int* idxA, int* idxB);
+		float getMutationRate();
 	};
 
 	GA::GA(int _population_size, int _chromosome_size, int _gene_set)
 	{
 		this->population_size = _population_size;
+		this->chromosome_size = _chromosome_size;
+		this->gene_set = _gene_set;
 
 		this->populations = new Individual*[_population_size];
 		for (int i = 0; i < this->population_size; i++)
@@ -46,8 +51,13 @@ namespace AI
 
 	void GA::Crossover()
 	{
+		Individual** new_populations;
 		int slicing_point, _parrentA=0, _parrentB=0;
 		int i, j;
+
+		new_populations = new Individual*[this->population_size];
+		for (int i = 0; i < this->population_size; i++)
+			new_populations[i] = new Individual(this->chromosome_size, this->gene_set);
 
 		for (i = 0; i < this->population_size; i++)
 		{
@@ -66,16 +76,29 @@ namespace AI
 				// first part of the child's chromosome contains the parrentA genes
 				for (j = 0; j < slicing_point; j++)
 				{
-					this->populations[i]->setGene(j, this->populations[_parrentA]->getGene(j));
+					new_populations[i]->setGene(j, this->populations[_parrentA]->getGene(j));
 				}
 
 				// second part of the child's chromosome contains the parrentB genes
 				for (j = slicing_point; j < this->populations[i]->getChromosomeSize(); j++)
 				{
-					this->populations[i]->setGene(j, this->populations[_parrentB]->getGene(j));
+					new_populations[i]->setGene(j, this->populations[_parrentB]->getGene(j));
 				}
 			}
+			else
+			{
+				for (j = 0; j < this->populations[i]->getChromosomeSize(); j++)
+				{
+					new_populations[i]->setGene(j, this->populations[i]->getGene(j));
+				}
+			}	
 		}
+
+		// vymaz staru populaciu a nahrad novou
+		for (i = 0; i < this->population_size; i++)
+			delete this->populations[i];		
+		delete[] this->populations;
+		this->populations = new_populations;
 	}
 
 	void GA::Mutation()
@@ -95,6 +118,9 @@ namespace AI
 				}
 			}
 		}
+
+		if (this->mutation_rate >= 0.01f)
+        	this->mutation_rate *= 0.99999f;
 	}
 
 	void GA::clearFitness()
@@ -109,6 +135,7 @@ namespace AI
 
 	int GA::getGeneOfIndividual(int idxIndiv, int idxGene)
 	{
+		//std::cout << "idxIndiv = " << idxIndiv << ", " << "idxGene = " << idxGene << std::endl;
 		return this->populations[idxIndiv]->getGene(idxGene);
 	}
 
@@ -139,7 +166,7 @@ namespace AI
 		return this->best;
 	}
 
-	int GA::RouletteWheelMechanism(int* idxA, int* idxB)
+	void GA::RouletteWheelMechanism(int* idxA, int* idxB)
 	{
 		float* probability = new float[this->population_size];
 		float sum = 0.0;
@@ -164,9 +191,12 @@ namespace AI
 		float a = ((float)rand() / (float)RAND_MAX);
 		float b = ((float)rand() / (float)RAND_MAX);
 
-		float min = 0, max = probability[0];
-		for (int i = 0; i < (this->population_size-1); i++)
+		float min = 0, max = 0;
+		for (int i = 0; i < this->population_size; i++)
 		{
+			min = max;
+			max += probability[i];
+
 			// if is a value in range
 			if (min <= a && a < max)
 			{
@@ -192,17 +222,19 @@ namespace AI
 
 				*idxB = i;
 			}
-
-			min = max;
-			max += probability[i+1];
 		}
 		//std::cout << std::endl;
 
-		return 0;
+		delete[] probability;
 	}
 
 	GA::~GA()
 	{
 		delete populations;
+	}
+
+	float GA::getMutationRate()
+	{
+		return this->mutation_rate;
 	}
 }

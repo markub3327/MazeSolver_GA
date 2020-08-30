@@ -3,14 +3,14 @@
 #include <iostream>
 #include <math.h>
 
-enum Objects
+enum Objects : int
 {
 	Nothing = 0,
 	Line,
 	End
 };
 
-enum LineTypes
+enum LineTypes : int
 {
 	Horizontal = 0,
 	Vertical
@@ -26,9 +26,8 @@ class Environment
 private:
 	int AreaWidth = 10;
 	int AreaHeight = 10;
-	Objects* content;
+	int* content;
 
-	void drawLine(int fx, int fy, int tx, int ty);
 	void clrEnv();
 public:
 	Environment();
@@ -40,38 +39,24 @@ public:
 	void NakresliHernySvet(int _x, int _y);
 	int getState(int _x, int _y);
 	Objects getContent(int _x, int _y);
-	void genRand(int _count);
-	void findLeaf(int* _x, int* _y);
 };
 
 
 Environment::Environment()
 {
-	content = new Objects[this->AreaWidth * this->AreaHeight];
-
-	// Clear environment
-	clrEnv();
-
-	// Set lines
-	this->content[2 + 2 * AreaWidth] = Objects::Line;
-	this->content[3 + 2 * AreaWidth] = Objects::Line;
-	this->content[4 + 2 * AreaWidth] = Objects::Line;
-	this->content[5 + 2 * AreaWidth] = Objects::Line;
-	this->content[6 + 2 * AreaWidth] = Objects::Line;
-	this->content[7 + 2 * AreaWidth] = Objects::Line;
-	this->content[4 + 3 * AreaWidth] = Objects::Line;
-	this->content[4 + 4 * AreaWidth] = Objects::Line;
-	this->content[4 + 5 * AreaWidth] = Objects::Line;
-	this->content[4 + 6 * AreaWidth] = Objects::Line;
-	this->content[4 + 7 * AreaWidth] = Objects::Line;
-	this->content[3 + 5 * AreaWidth] = Objects::Line;
-	this->content[2 + 5 * AreaWidth] = Objects::Line;
-	this->content[2 + 6 * AreaWidth] = Objects::Line;
-	this->content[7 + 3 * AreaWidth] = Objects::Line;
-	this->content[7 + 4 * AreaWidth] = Objects::Line;
-
-	// Set end
-	this->content[5 + 7 * AreaWidth] = Objects::End;
+	content = new int[this->AreaWidth * this->AreaHeight] 
+	{ 
+        	0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            0, 1, 0, 0, 0, 1, 0, 1, 0, 1,
+            0, 0, 0, 0, 0, 1, 1, 1, 0, 0,
+            1, 0, 0, 1, 0, 1, 0, 1, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            0, 1, 0, 0, 0, 1, 0, 0, 1, 0,
+            0, 1, 1, 1, 1, 1, 0, 0, 1, 0,
+            0, 1, 0, 1, 0, 1, 0, 0, 1, 0,
+            0, 1, 1, 1, 0, 1, 0, 0, 2, 0,
+    };
 }
 
 int Environment::getWidth()
@@ -98,19 +83,19 @@ float Environment::getReward(int _x, int _y, int* _done)
 	{
 	case Objects::Nothing:
 		// ak strati ciaru
-		reward = -100;
+		reward = -0.75;
 		// end of game
-		*_done = 1;
+		*_done = 0;
 		break;
 	case Objects::End:
 		// nasiel vychod z bludiska
-		reward = +100;
+		reward = +1.0;
 		// end of game
 		*_done = -1;
 		break;
 	default:
 		// pre najdenie najkratsej trasy
-		reward = -1;
+		reward = -0.04;
 		*_done = 0;
 		break;
 	}
@@ -170,96 +155,7 @@ int Environment::getState(int _x, int _y)
 
 Objects Environment::getContent(int _x, int _y)
 {
-	return this->content[getState(_x, _y)];
-}
-
-void Environment::findLeaf(int* _x, int* _y)
-{
-	int count;
-
-	for (int i = this->AreaWidth; i < (this->AreaWidth * this->AreaHeight) - this->AreaWidth; i++)
-	{
-		count = 0;
-
-		if (this->content[i] == Objects::Line)
-		{
-			if (this->content[i - 1] == Objects::Line)
-				count++;
-
-			if (this->content[i + 1] == Objects::Line)
-				count++;
-
-			if (this->content[i - this->AreaWidth] == Objects::Line)
-				count++;
-
-			if (this->content[i + this->AreaWidth] == Objects::Line)
-				count++;			
-		}
-
-		if (count <= 1)
-		{
-			*_x = i % this->AreaWidth;
-			*_y = i / this->AreaWidth;
-			break;
-		}
-	}
-}
-
-void Environment::drawLine(int fx, int fy, int tx, int ty)
-{
-	/*std::cout << "fx = " << fx << std::endl;
-	std::cout << "fy = " << fy << std::endl;
-
-	std::cout << "tx = " << tx << std::endl;
-	std::cout << "ty = " << ty << std::endl;*/
-
-	for (int x = fx; x < tx; x++)
-	{
-		for (int y = fy; y < ty; y++)
-		{
-			std::cout << "content = " << this->content[getState(x, y)] << std::endl;
-			std::cout << "state = " << getState(x, y) << std::endl;
-			this->content[getState(x, y)] = Objects::Line;
-		}
-	}
-}
-
-void Environment::genRand(int _count)
-{
-	LineTypes _type;
-	Point _start;
-	int _size;
-
-	Point last_point1, last_point2;
-
-	// Vycisti prostredie
-	clrEnv();
-
-	last_point1.x = 1;
-	last_point1.y = 1;
-
-	last_point2.x = (this->AreaWidth - 2);
-	last_point2.y = (this->AreaHeight - 2);
-
-	// vieme pocet ciar
-	for (int i = 0; i < _count; i++)
-	{
-		_start.x = ((rand() % last_point2.x) + last_point1.x);
-		_start.y = ((rand() % last_point2.y) + last_point1.y);
-
-		// vygenerujeme nahodny tvar a dlzku ciary
-		_type = (LineTypes)(rand() % 2);
-		if (_type == LineTypes::Horizontal)
-			_size = ((rand() % (this->AreaWidth - _start.x)) + 1);
-		else
-			_size = ((rand() % (this->AreaHeight - _start.y)) + 1);
-
-		// zaciname 0. ciarou od bodu _start
-		if (_type == LineTypes::Horizontal)
-			drawLine((last_point1.x = _start.x), (last_point1.y = _start.y), (last_point2.x = (_start.x + _size)), (last_point2.y = _start.y));
-		else
-			drawLine((last_point1.x = _start.x), (last_point1.y = _start.y), (last_point2.x = _start.x), (last_point2.y = (_start.y + _size)));
-	}
+	return (Objects) this->content[getState(_x, _y)];
 }
 
 Environment::~Environment()

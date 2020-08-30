@@ -18,14 +18,10 @@ private:
 	int positionY;
 
 	float reward;
-
-	int penalties;
 public:
 	Player();
 	~Player();
 
-	void setPenalties(int val);
-	int getPenalties();
 	void Move(int _action);
 	void Move(int _x, int _y);
 	int getX();
@@ -33,16 +29,6 @@ public:
 	void setReward(float val);
 	float getReward();
 };
-
-void Player::setPenalties(int val)
-{
-	this->penalties = val;
-}
-
-int Player::getPenalties()
-{
-	return this->penalties;
-}
 
 void Player::setReward(float val)
 {
@@ -95,7 +81,6 @@ Player::Player()
 	this->positionY = 2;
 
 	this->reward = 0;
-	this->penalties = 1;
 }
 
 

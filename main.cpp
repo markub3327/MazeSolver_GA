@@ -18,10 +18,10 @@ using namespace AI;
 using namespace std;
 
 
-#define VELKOST_POPULACIE						  (64)	// pocet jedincov
-#define POCET_GENOV								   (2)
-#define POCET_KROKOV							  (40)
-#define POCET_GENERACII						   (10000)
+#define VELKOST_POPULACIE						 (1000) 	// pocet jedincov
+#define POCET_GENOV								    (2)
+#define POCET_KROKOV							  (100)
+#define POCET_GENERACII						   (100000)
 
 int main(int argc, char** argv)
 {
@@ -39,21 +39,10 @@ int main(int argc, char** argv)
 	// init random
 	srand((unsigned)time(NULL));
 
-	/*for (;;)
-	{
-		_env->genRand(2);
+	int startPositionsX[3] = { 0, 9, 0 };
+	int startPositionsY[3] = { 1, 1, 5 };
 
-		//_env->findLeaf(&x1, &y1);
-		//_robot.Move(x1, y1);
-
-		_env->NakresliHernySvet(_robot.getX(), _robot.getY());
-		this_thread::sleep_for(std::chrono::milliseconds(1000));
-	}*/
-
-	// Main loop
-	//for (;;)
-	//{
-		//  Training agent's brain
+	//  Training agent's brain
 	for (int generation = 0; generation <= POCET_GENERACII; generation++)
 	{
 		// clear fitness
@@ -61,25 +50,27 @@ int main(int argc, char** argv)
 
 		for (int individual_index = 0; individual_index < VELKOST_POPULACIE; individual_index++)
 		{
-			// nove kolo hry
-			done = 0;
-
-			// init robot object	
-			if (individual_index == _ai->getBest())
-				_robot.setPenalties(1);
-
 			// pociatocny stav
-			_robot.Move(2, 2);
+			auto idx = rand() % 3;
+			_robot.Move(startPositionsX[idx], startPositionsY[idx]);
 
 			for (int step = 0; step < POCET_KROKOV; step++)
 			{
+				auto oldX = _robot.getX();
+				auto oldY = _robot.getY();
+				
 				// Vykonaj akciu
 				_robot.Move(_ai->getGeneOfIndividual(individual_index, _env->getState(_robot.getX(), _robot.getY())));
 
-				// Zisti odmenu za akciu a[t]
-				_robot.setReward(_env->getReward(_robot.getX(), _robot.getY(), &done));
-				if (individual_index == _ai->getBest())
-					_robot.setPenalties(_robot.getPenalties() + done);
+			    if (_robot.getX() < 0 || _robot.getX() > (_env->getWidth()-1) || _robot.getY() < 0 || _robot.getY() > (_env->getHeight()-1))
+				{
+					_robot.setReward(-50.0);
+					_robot.Move(oldX, oldY);
+					done = 1;
+				}
+				else
+					// Zisti odmenu za akciu a[t]
+					_robot.setReward(_env->getReward(_robot.getX(), _robot.getY(), &done));
 
 				// Zaznamenaj odmenu do celkovej sily jedinca
 				_ai->setFitnessOfIndividual(individual_index, _robot.getReward());
@@ -97,7 +88,7 @@ int main(int argc, char** argv)
 					std::cout << "*	 step = " << step << std::endl;
 					std::cout << "*	 done = " << done << std::endl;
 					std::cout << "*	 fitness = " << _ai->getFitnessOfIndividual(individual_index) << std::endl;
-					std::cout << "*	 penalties_best = " << _robot.getPenalties() << std::endl;
+					std::cout << "*	 mutation_rate = " << _ai->getMutationRate() << std::endl;
 				}
 
 				// ak konec hry
@@ -105,20 +96,12 @@ int main(int argc, char** argv)
 			}
 		}
 
-		//if (generation % 10 == 0)
-		for (int i = 0; i < VELKOST_POPULACIE; i++)		
-		{
-			//std::cout << "fitness = " << _ai->getFitnessOfIndividual(_ai->getBest()) << std::endl;
-			fprintf(f_fitness, "%f;", _ai->getFitnessOfIndividual(i));
-		}
-		fprintf(f_fitness, "\n");
+		auto score = _ai->getFitnessOfIndividual(_ai->getBest());
+		if (generation % 100 == 0 && score > -50.0)
+			fprintf(f_fitness, "%f\n", score);
 
 		// Najdi najlepsieho jedinca (jeho vlastnosti sa nebudu menit)
 		_ai->updateBest();
-
-		// ukonci trening ak najdes ciel
-		if (_robot.getPenalties() == 0)
-			break;
 
 		// Krizenie dvoch rodicov
 		_ai->Crossover();
@@ -128,13 +111,14 @@ int main(int argc, char** argv)
 	}
 
 	// Pause
-	system("pause");
+	//system("pause");
 
 	//  Testing agent 
-	for (int time = 0; time < 5; time++)
+	/*for (int time = 0; time < 5; time++)
 	{
 		// pociatocny stav
-		_robot.Move(2, 2);
+		auto idx = rand() % 3;
+		_robot.Move(startPositionsX[idx], startPositionsY[idx]);
 
 		// Nakresli herny svet
 		_env->NakresliHernySvet(_robot.getX(), _robot.getY());
@@ -158,10 +142,7 @@ int main(int argc, char** argv)
 	}
 
 	// Pause
-	system("pause");
-
-	//_env->genRand(10);
-//}
+	system("pause");*/
 
 	fclose(f_fitness);
 
