@@ -1,5 +1,14 @@
 # MazeSolver - Genetic algorithm
 
+[![Release](https://img.shields.io/github/release/markub3327/MazeSolver_GA)](https://github.com/markub3327/MazeSolver_GA/releases)
+![Tag](https://img.shields.io/github/v/tag/markub3327/MazeSolver_GA)
+
+[![Issues](https://img.shields.io/github/issues/markub3327/MazeSolver_GA)](https://github.com/markub3327/MazeSolver_GA/issues)
+![Commits](https://img.shields.io/github/commit-activity/w/markub3327/MazeSolver_GA)
+
+![Languages](https://img.shields.io/github/languages/count/markub3327/MazeSolver_GA)
+![Size](https://img.shields.io/github/repo-size/markub3327/MazeSolver_GA)
+
 A genetic algorithm is a search heuristic. This algorithm reflects the process of natural selection where the fittest individuals are selected for reproduction in order to produce offspring of the next generation. The best individual is solution of maze. Design of maze is defined in Environment.h
 
 ## States
