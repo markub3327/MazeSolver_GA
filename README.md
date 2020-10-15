@@ -42,7 +42,7 @@ g++ -Xpreprocessor -fopenmp *.cpp -o MazeSolver_GA -lomp --std=c++17
 
 Compiling for Linux users:
 ```
-g++ -fopenmp *.cpp -o MazeSolver_GA -lomp --std=c++17
+g++ -fopenmp *.cpp -o MazeSolver_GA -lgomp --std=c++17
 ```
 
 ## Run
