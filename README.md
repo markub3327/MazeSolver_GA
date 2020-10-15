@@ -23,12 +23,29 @@ A genetic algorithm is a search heuristic. This algorithm reflects the process o
 * Left
 * Right
 
-**Compile**
+## Compile
+You must install the OpenMP library before compiling!
+
+Install OpenMP on MacOS:
 ```
-g++ *.cpp -o MazeSolver_GA --std=c++17
+brew install libomp
+```
+Install OpenMP on Linux (Ubuntu):
+```
+sudo apt-get install libomp-dev
 ```
 
-**Run**
+Compiling for MacOS users:
+```
+g++ -Xpreprocessor -fopenmp *.cpp -o MazeSolver_GA -lomp --std=c++17
+```
+
+Compiling for Linux users:
+```
+g++ -fopenmp *.cpp -o MazeSolver_GA -lomp --std=c++17
+```
+
+## Run
 ```
 ./MazeSolver_GA
 ```
