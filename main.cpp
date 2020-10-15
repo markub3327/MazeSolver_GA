@@ -2,6 +2,7 @@
 #include <math.h>
 #include <time.h>
 
+#include <cstring>
 #include <iostream>
 #include <iomanip>
 #include <sstream> 
@@ -55,13 +56,11 @@ int main(int argc, char** argv)
 		DoProgress("Training: ", generation, POCET_GENERACII);
 
 		#pragma omp parallel for
-		{
 			for (int individual_index = 0; individual_index < VELKOST_POPULACIE; individual_index++)
 			{
 				//cout << "Individual: " << individual_index << ", Thread ID: " << omp_get_thread_num() << endl;
 				trainig_loop(individual_index);
 			}
-		}
 
 		// Najdi najlepsieho jedinca (jeho vlastnosti sa nebudu menit)
 		_ai->updateBest();
