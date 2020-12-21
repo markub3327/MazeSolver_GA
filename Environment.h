@@ -46,7 +46,7 @@ Environment::Environment()
 {
 	content = new int[this->AreaWidth * this->AreaHeight] 
 	{ 
-    	0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         0, 1, 0, 0, 0, 1, 0, 1, 0, 1,
         0, 0, 0, 1, 1, 1, 1, 1, 0, 0,
@@ -54,7 +54,7 @@ Environment::Environment()
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         0, 1, 0, 1, 0, 1, 0, 0, 1, 0,
         0, 1, 1, 1, 1, 1, 0, 0, 1, 0,
-        0, 1, 0, 1, 0, 1, 1, 0, 1, 0,
+        0, 1, 0, 1, 0, 1, 1, 1, 1, 0,
         0, 1, 1, 1, 0, 1, 0, 0, 2, 0
 	};
 }
@@ -83,7 +83,7 @@ float Environment::getReward(int _x, int _y, int* _done)
 	{
 	case Objects::Nothing:
 		// ak strati ciaru
-		reward = -0.75;
+		reward = -0.55;
 		// end of game
 		*_done = 0;
 		break;
@@ -95,7 +95,7 @@ float Environment::getReward(int _x, int _y, int* _done)
 		break;
 	default:
 		// pre najdenie najkratsej trasy
-		reward = -0.015;
+		reward = -0.17;
 		*_done = 0;
 		break;
 	}
@@ -116,7 +116,7 @@ void Environment::NakresliHernySvet(int _x, int _y)
 				if (_x == i && _y == j)
 				{
 				    //SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (BACKGROUND_RED|FOREGROUND_INTENSITY));					
-					std::cout << "\033[0;41m O \033[0m";
+					std::cout << "\033[0;41m A \033[0m";
 				    //SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (0|FOREGROUND_INTENSITY));
 				}
 				else
@@ -129,7 +129,7 @@ void Environment::NakresliHernySvet(int _x, int _y)
 						break;
 					case (int)Objects::Line:
 						//Console.BackgroundColor = ConsoleColor.White;
-						std::cout << "\033[0;47;30m X \033[0m";
+						std::cout << "\033[0;47;30m + \033[0m";
 						//Console.ResetColor();
 						break;
 					case (int)Objects::End:

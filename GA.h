@@ -43,7 +43,7 @@ namespace AI
 		for (int i = 0; i < this->population_size; i++)
 			this->populations[i] = new Individual(_chromosome_size, _gene_set);
 
-		this->mutation_rate = 1.0f;	// 20%
+		this->mutation_rate = 1.0f;
 
 		// 0. generacia nema este hodnotenie
 		this->best = 0;
@@ -120,7 +120,7 @@ namespace AI
 		}
 
 		if (this->mutation_rate >= 0.01f)
-        	this->mutation_rate *= 0.999995f;
+        	this->mutation_rate *= 0.99995f;
 	}
 
 	void GA::clearFitness()

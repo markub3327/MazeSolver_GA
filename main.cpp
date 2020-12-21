@@ -21,10 +21,10 @@ using namespace AI;
 using namespace std;
 
 // definicie prostredia
-#define VELKOST_POPULACIE						   (128)
+#define VELKOST_POPULACIE						   (256)
 #define POCET_GENOV								     (2)
 #define POCET_KROKOV							   (100)
-#define POCET_GENERACII						   (1000000)
+#define POCET_GENERACII						    (100000)
 
 // global variables
 vector<Vector2*> start_positions;
