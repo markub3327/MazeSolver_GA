@@ -20,16 +20,33 @@
 using namespace AI;
 using namespace std;
 
-// definicie prostredia
+// parametre GA
 #define VELKOST_POPULACIE						   (256)
-#define POCET_GENOV								     (2)
+#define POCET_GENOV						             (2)
+#define POCET_GENERACII						        (100000)
+#define MUTATION_DECAY						      (0.99995f)
+
+// parametre prostredia hry
 #define POCET_KROKOV							   (100)
-#define POCET_GENERACII						    (100000)
+#define SIRKA_BLUDISKA                                                      (10)     
+#define VYSKA_BLUDISKA                                                      (10)
 
 // global variables
 vector<Vector2*> start_positions;
-Environment* _env = new Environment();
-GA* _ai = new GA(VELKOST_POPULACIE, (_env->getWidth()*_env->getHeight()), POCET_GENOV);
+GA* _ai = new GA(VELKOST_POPULACIE, (SIRKA_BLUDISKA*VYSKA_BLUDISKA), POCET_GENOV, MUTATION_DECAY);
+Environment* _env = new Environment(
+    new int[SIRKA_BLUDISKA * VYSKA_BLUDISKA] { 
+        0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        0, 1, 0, 0, 0, 1, 0, 1, 0, 1,
+        0, 0, 0, 1, 1, 1, 1, 1, 0, 0,
+        1, 0, 0, 1, 0, 1, 0, 1, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        0, 1, 0, 1, 0, 1, 0, 0, 1, 0,
+        0, 1, 1, 1, 1, 1, 0, 0, 1, 0,
+        0, 1, 0, 1, 0, 1, 1, 1, 1, 0,
+        0, 1, 1, 1, 0, 1, 0, 0, 2, 0
+});
 
 // fn
 void DoProgress(const char *label, int step, int total);
