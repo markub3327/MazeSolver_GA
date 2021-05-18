@@ -10,6 +10,7 @@ namespace AI
 	class GA
 	{
 	private:
+		float mutation_decay;
 		float mutation_rate;
 		int population_size;
 		int gene_set;
@@ -18,7 +19,7 @@ namespace AI
 		Individual** populations;
 		int best;
 	public:
-		GA(int _population_size, int _chromosome_size, int _gene_set);
+		GA(int _population_size, int _chromosome_size, int _gene_set, float _mutation_decay);
 		~GA();
 
 		void Crossover();
@@ -38,6 +39,7 @@ namespace AI
 		this->population_size = _population_size;
 		this->chromosome_size = _chromosome_size;
 		this->gene_set = _gene_set;
+		this->mutation_decay = _mutation_decay;
 
 		this->populations = new Individual*[_population_size];
 		for (int i = 0; i < this->population_size; i++)
@@ -120,7 +122,7 @@ namespace AI
 		}
 
 		if (this->mutation_rate >= 0.01f)
-        	this->mutation_rate *= 0.99995f;
+        	  this->mutation_rate *= mutation_decay;
 	}
 
 	void GA::clearFitness()
