@@ -178,10 +178,7 @@ namespace AI
 		for (int i = 0; i < this->population_size; i++)
 		{
 			probability[i] = exp(this->populations[i]->getFitness()) / sum;
-			//std::cout << "*	probability = " << probability[i] << std::endl;
-			//std::cout << "fitness = " << this->populations[i]->getFitness() << std::endl;
 		}
-		//std::cout << std::endl;
 		/*********************************************************/
 
 		// Pseudorandom selection
@@ -195,33 +192,16 @@ namespace AI
 			min = max;
 			max += probability[i];
 
-			// if is a value in range
 			if (min <= a && a < max)
 			{
-				//std::cout << "a = " << a << std::endl;
-				//std::cout << "interval = <" << min << "; " << max << ")" << std::endl;
-				//std::cout << "index_of_selectedA = " << i << std::endl;
-				//std::cout << "probability_of_selectedA = " << probability[i] << std::endl;
-				//std::cout << "fitness_of_selectedA = " << this->populations[i]->getFitness() << std::endl;
-				//break;
-
 				*idxA = i;
 			}
 
-			// if is b value in range
 			if (min <= b && b < max)
 			{
-				//std::cout << "b = " << b << std::endl;
-				//std::cout << "interval = <" << min << "; " << max << ")" << std::endl;
-				//std::cout << "index_of_selectedB = " << i << std::endl;
-				//std::cout << "probability_of_selectedB = " << probability[i] << std::endl;
-				//std::cout << "fitness_of_selectedB = " << this->populations[i]->getFitness() << std::endl;
-				//break;
-
 				*idxB = i;
 			}
 		}
-		//std::cout << std::endl;
 
 		delete[] probability;
 	}
