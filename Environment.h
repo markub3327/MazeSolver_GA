@@ -30,7 +30,7 @@ private:
 
 	void clrEnv();
 public:
-	Environment();
+	Environment(int* env);
 	~Environment();
 
 	int getWidth();
@@ -42,21 +42,9 @@ public:
 };
 
 
-Environment::Environment()
+Environment::Environment(int* env)
 {
-	content = new int[this->AreaWidth * this->AreaHeight] 
-	{ 
-        0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        0, 1, 0, 0, 0, 1, 0, 1, 0, 1,
-        0, 0, 0, 1, 1, 1, 1, 1, 0, 0,
-        1, 0, 0, 1, 0, 1, 0, 1, 0, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        0, 1, 0, 1, 0, 1, 0, 0, 1, 0,
-        0, 1, 1, 1, 1, 1, 0, 0, 1, 0,
-        0, 1, 0, 1, 0, 1, 1, 1, 1, 0,
-        0, 1, 1, 1, 0, 1, 0, 0, 2, 0
-	};
+	content = env;
 }
 
 int Environment::getWidth()
