@@ -31,9 +31,7 @@ using namespace std;
 #define SIRKA_BLUDISKA                                                      (10)     
 #define VYSKA_BLUDISKA                                                      (10)
 
-// global variables
-vector<Vector2*> start_positions;
-GA* _ai = new GA(VELKOST_POPULACIE, (SIRKA_BLUDISKA*VYSKA_BLUDISKA), POCET_GENOV, MUTATION_DECAY);
+// definicia prostredia
 Environment* _env = new Environment(
     new int[SIRKA_BLUDISKA * VYSKA_BLUDISKA] { 
         0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
@@ -47,6 +45,12 @@ Environment* _env = new Environment(
         0, 1, 0, 1, 0, 1, 1, 1, 1, 0,
         0, 1, 1, 1, 0, 1, 0, 0, 2, 0
 });
+
+// startovacie pozicie
+vector<Vector2*> start_positions;
+
+// Geneticky algoritmus
+GA* _ai = new GA(VELKOST_POPULACIE, (SIRKA_BLUDISKA*VYSKA_BLUDISKA), POCET_GENOV, MUTATION_DECAY);
 
 // fn
 void DoProgress(const char *label, int step, int total);
