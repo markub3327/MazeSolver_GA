@@ -24,13 +24,13 @@ typedef struct {
 class Environment
 {
 private:
-	int AreaWidth = 10;
-	int AreaHeight = 10;
+	int AreaWidth;
+	int AreaHeight;
 	int* content;
 
 	void clrEnv();
 public:
-	Environment(int* env);
+	Environment(int width, int height, int* env);
 	~Environment();
 
 	int getWidth();
@@ -42,9 +42,11 @@ public:
 };
 
 
-Environment::Environment(int* env)
+Environment::Environment(int width, int height, int* env)
 {
-	content = env;
+	this->AreaWidth = width;
+	this->AreaHeight = height;
+	this->content = env;
 }
 
 int Environment::getWidth()
