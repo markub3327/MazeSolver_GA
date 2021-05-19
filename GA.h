@@ -34,7 +34,7 @@ namespace AI
 		float getMutationRate();
 	};
 
-	GA::GA(int _population_size, int _chromosome_size, int _gene_set)
+	GA::GA(int _population_size, int _chromosome_size, int _gene_set, float _mutation_decay)
 	{
 		this->population_size = _population_size;
 		this->chromosome_size = _chromosome_size;
