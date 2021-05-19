@@ -33,6 +33,8 @@ using namespace std;
 
 // definicia prostredia
 Environment* _env = new Environment(
+    SIRKA_BLUDISKA,
+    VYSKA_BLUDISKA,
     new int[SIRKA_BLUDISKA * VYSKA_BLUDISKA] { 
         0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
