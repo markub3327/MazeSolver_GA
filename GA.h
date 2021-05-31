@@ -65,19 +65,14 @@ namespace AI
 		{
 			if (i != this->best)
 			{
-				// Vyber
 				RouletteWheelMechanism(&_parrentA, &_parrentB);
 
-				// Nahodny slicing point
 				slicing_point = (rand() % this->populations[i]->getChromosomeSize());
 
-				// 1. cast obsahuje informacie od parrentA
 				for (j = 0; j < slicing_point; j++)
 				{
 					new_populations[i]->setGene(j, this->populations[_parrentA]->getGene(j));
 				}
-
-				// 2. cast obsahuje informacie od parrentB
 				for (j = slicing_point; j < this->populations[i]->getChromosomeSize(); j++)
 				{
 					new_populations[i]->setGene(j, this->populations[_parrentB]->getGene(j));
